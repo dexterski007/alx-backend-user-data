@@ -30,3 +30,9 @@ def stats() -> str:
 def unauth() -> str:
     """ unauth api response """
     abort(401, description="unauthorized access")
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbid() -> str:
+    """ unauth api response """
+    abort(403, description="forbidden access")
