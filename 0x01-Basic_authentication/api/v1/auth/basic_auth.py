@@ -74,6 +74,7 @@ class BasicAuth(Auth):
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
+        """ Method for current user """
         auth_head = self.authorization_header(request)
         base64_head = self.extract_base64_authorization_header(auth_head)
         decoded = self.decode_base64_authorization_header(base64_head)
