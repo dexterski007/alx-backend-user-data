@@ -13,7 +13,7 @@ class Auth:
         """ public method for require auth """
         if path is None:
             return True
-        if excluded_paths is None or len(excluded_paths) == 0:
+        if excluded_paths is None:
             return True
         for element in map(lambda x: x.strip(), excluded_paths):
             pattern = ''
