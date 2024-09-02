@@ -4,9 +4,10 @@ basic auth module for the API
 """
 from api.v1.auth.auth import Auth
 from flask import Flask, request
-from typing import List, TypeVar
+from typing import List, TypeVar, Tuple
 import base64
 import binascii
+import re
 
 
 class BasicAuth(Auth):
@@ -36,3 +37,20 @@ class BasicAuth(Auth):
             return decoded.decode('utf-8')
         except (binascii.Error):
             return None
+
+    def extract_user_credentials(self,
+                                 decoded_base64_authorization_header:
+                                 str) -> Tuple[str, str]:
+        """ Method for user creds extraction """
+        if decoded_base64_authorization_header is None:
+            return (None, None)
+        if not type(decoded_base64_authorization_header) is str:
+            return (None, None)
+        pattern = r'((?P<user>[^:]+):(?P<pass>.+))'
+        match = re.fullmatch(pattern,
+                             decoded_base64_authorization_header.strip())
+        if match is not None:
+            user = match.group('user')
+            passw = match.group('pass')
+            return (user, passw)
+        return (None, None)
