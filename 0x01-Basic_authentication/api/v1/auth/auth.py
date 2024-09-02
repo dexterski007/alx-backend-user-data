@@ -20,7 +20,7 @@ class Auth:
             if element[-1] == '*':
                 pattern = '{}.*'.format(element[0:-1])
             elif element[-1] == '/':
-                pettern = '{}/*'.format(element[0:-1])
+                pattern = '{}/*'.format(element[0:-1])
             else:
                 pattern = '{}/*'.format(element)
             if re.match(pattern, path):
