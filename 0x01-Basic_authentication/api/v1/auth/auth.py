@@ -18,7 +18,7 @@ class Auth:
         for element in map(lambda x: x.strip(), excluded_paths):
             pattern = ''
             if element[-1] == '*':
-                pattern = '{}.*'.format(element[0:1])
+                pattern = '{}.*'.format(element[0:-1])
             elif element[-1] == '/':
                 pettern = '{}/*'.format(element[0:-1])
             else:
