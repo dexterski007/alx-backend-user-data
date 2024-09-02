@@ -4,6 +4,7 @@ auth module for the API
 """
 from flask import Flask, request
 from typing import List, TypeVar
+import re
 
 
 class Auth:
@@ -14,8 +15,15 @@ class Auth:
             return True
         if excluded_paths is None or len(excluded_paths) == 0:
             return True
-        for element in excluded_paths:
-            if path.rstrip('/') in element.rstrip('/'):
+        for element in map(lambda x: x.strip(), excluded_paths):
+            pattern = ''
+            if element[-1] == '*':
+                pattern = '{}.*'.format(element[0:1])
+            elif element[-1] == '/':
+                pettern = '{}/*'.format(element[0:-1])
+            else:
+                pattern = '{}/*'.format(element)
+            if re.match(pattern, path):
                 return False
         return True
 
