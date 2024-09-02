@@ -6,6 +6,7 @@ from api.v1.auth.auth import Auth
 from flask import Flask, request
 from typing import List, TypeVar
 import base64
+import binascii
 
 
 class BasicAuth(Auth):
@@ -33,5 +34,5 @@ class BasicAuth(Auth):
             decoded = base64.b64decode(base64_authorization_header,
                                        validate=True)
             return decoded.decode('utf-8')
-        except:
+        except (binascii.Error):
             return None
