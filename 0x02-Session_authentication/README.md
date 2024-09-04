@@ -1,4 +1,4 @@
-0x01 - basic auth
+0x02 - session auth
 
 # Simple API
 
