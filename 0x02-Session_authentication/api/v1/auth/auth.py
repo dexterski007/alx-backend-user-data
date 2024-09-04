@@ -5,6 +5,7 @@ auth module for the API
 from flask import Flask, request
 from typing import List, TypeVar
 import re
+import os
 
 
 class Auth:
@@ -36,3 +37,10 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """ Current User public method """
         return None
+    
+    def session_cookie(self, request=None):
+        """ return cookie for session """
+        if request is None:
+            return None
+        _my_session_id = os.getenv("SESSION_NAME")
+        return request.cookies.get(_my_session_id)
