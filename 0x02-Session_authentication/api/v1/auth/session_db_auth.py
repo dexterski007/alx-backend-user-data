@@ -33,11 +33,11 @@ class SessionDBAuth(SessionExpAuth):
             session = UserSession.search({"session_id": session_id})
         except Exception:
             return None
-        if session is None or len(session) == []:
+        if session is None:
             return None
         if self.session_duration > 0:
             if (datetime.now() - session[0].created_at)\
-                .total_seconds() > self.session_duration:
+                 .total_seconds() > self.session_duration:
                 return None
         return session[0].user_id
 
@@ -46,11 +46,11 @@ class SessionDBAuth(SessionExpAuth):
         if not request:
             return False
         session_id = self.session_cookie(request)
+        if not session_id:
+            return False
         try:
             session = UserSession.search({"session_id": session_id})
         except Exception:
-            return False
-        if session is None or len(session) == []:
             return False
         session[0].remove()
         return True
