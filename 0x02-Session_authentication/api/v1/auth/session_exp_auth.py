@@ -15,9 +15,9 @@ class SessionExpAuth(SessionAuth):
         """ constructor method for session exp"""
         super().__init__()
         try:
-            session_duration = int(os.getenv("SESSION_DURATION"), '0')
+            self.session_duration = int(os.getenv("SESSION_DURATION"), '0')
         except Exception:
-            session_duration = 0
+            self.session_duration = 0
 
     def create_session(self, user_id=None):
         """ create session method """
