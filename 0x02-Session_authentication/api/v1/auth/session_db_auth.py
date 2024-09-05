@@ -1,54 +1,60 @@
 #!/usr/bin/env python3
 """
-session auth expiration module for the API
+session authentication
 """
-from api.v1.auth.session_exp_auth import SessionExpAuth
-from models.user_session import UserSession
+from .session_exp_auth import SessionExpAuth
+import uuid
 import os
 from datetime import datetime, timedelta
-from models.user import User
-from uuid import uuid4
+from models.user_session import UserSession
 
 
 class SessionDBAuth(SessionExpAuth):
-    """ Class for session Auth db """
+    """
+    session database authontication"""
     def create_session(self, user_id=None):
-        """ create session method """
+        """
+        session creating
+        """
         session_id = super().create_session(user_id)
         if session_id is None:
             return None
-        kwargs = {
-            "user_id": user_id,
-            "session_id": session_id
-        }
-        session = UserSession(**kwargs)
-        session.save()
+        user_session = UserSession(**{
+            'session_id': session_id,
+            'user_id': user_id
+        })
+        user_session.save()
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
-        """ user id for session db """
+        """
+        user_id for session
+        """
         if session_id is None:
             return None
         if super().user_id_for_session_id(session_id) is None:
             return None
         try:
-            session = UserSession.search({"session_id": session_id})
+            user_session = UserSession.search({"session_id": session_id})
         except Exception:
             return None
-        if session is None or len(session) == []:
+        if user_session is None or user_session == []:
             return None
-        return session[0].user_id
+
+        return user_session[0].user_id
 
     def destroy_session(self, request=None):
-        """ destroy session method """
+        """
+        destroy session
+        """
         if not super().destroy_session(request):
             return False
         session_id = self.session_cookie(request)
         try:
-            session = UserSession.search({"session_id": session_id})
+            user_session = UserSession.search({"session_id": session_id})
         except Exception:
+            return None
+        if user_session is None or user_session == []:
             return False
-        if session is None or len(session) == []:
-            return False
-        session[0].remove()
+        user_session[0].remove()
         return True
