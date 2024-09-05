@@ -12,19 +12,27 @@ from uuid import uuid4
 
 class SessionDBAuth(SessionExpAuth):
     """ Class for session Auth db """
-    def create_session(self, user_id=None):
-        """ create session method """
+    def __init__(self):
+        super().__init__()
+
+    def create_session(self, user_id: str = None) -> str:
+        """ Create a new session ID and store it in UserSession """
         if not user_id or not isinstance(user_id, str):
             return None
+
+        # Create session ID using the parent method
         session_id = super().create_session(user_id)
         if session_id is None:
             return None
-        kwargs = {
-            "user_id": user_id,
-            "session_id": session_id,
+        session_data = {
+            'user_id': user_id,
+            'session_id': session_id,
+            'created_at': datetime.now().strftime(TIMESTAMP_FORMAT)
         }
-        session = UserSession(**kwargs)
-        session.save()
+        # Create a new UserSession and save it
+        user_session = UserSession(**session_data)
+        user_session.save()
+
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
