@@ -9,20 +9,19 @@ from datetime import datetime, timedelta
 from models.user import User
 from uuid import uuid4
 
-format = "%Y-%m-%dT%H:%M:%S"
-
 
 class SessionDBAuth(SessionExpAuth):
     """ Class for session Auth db """
     def create_session(self, user_id=None):
         """ create session method """
+        if not user_id or not isinstance(user_id, str):
+            return None
         session_id = super().create_session(user_id)
         if session_id is None:
             return None
         kwargs = {
             "user_id": user_id,
             "session_id": session_id,
-            "created_at": datetime.now().strftime(format)
         }
         session = UserSession(**kwargs)
         session.save()
