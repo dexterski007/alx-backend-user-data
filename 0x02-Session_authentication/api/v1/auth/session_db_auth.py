@@ -23,7 +23,7 @@ class SessionDBAuth(SessionExpAuth):
             session = UserSession(**kwargs)
             session.save()
             return session_id
-    
+
     def user_id_for_session_id(self, session_id=None):
         """ user id for session db """
         session = UserSession.search({"session_id": session_id})
