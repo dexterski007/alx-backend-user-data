@@ -23,11 +23,8 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """ user id by session method """
-        if session_id is None:
-            return None
-        if not type(session_id) is str:
-            return None
-        return self.user_id_by_session_id.get(session_id)
+        if type(session_id) is str:
+            return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None):
         """ current user method """
