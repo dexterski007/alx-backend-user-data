@@ -27,7 +27,6 @@ class SessionDBAuth(SessionExpAuth):
         session_data = {
             'user_id': user_id,
             'session_id': session_id,
-            'created_at': datetime.now().strftime(TIMESTAMP_FORMAT)
         }
         # Create a new UserSession and save it
         user_session = UserSession(**session_data)
