@@ -28,27 +28,22 @@ class SessionDBAuth(SessionExpAuth):
         session.save()
         return session_id
 
-    def user_id_for_session_id(self, session_id: str = None) -> str:
-        """ Retrieve user ID based on session ID from UserSession """
+    def user_id_for_session_id(self, session_id=None):
+        """ user id for session db """
         if not session_id:
             return None
         try:
-            # Search for the UserSession based on session_id
-            user_session = UserSession.search({"session_id": session_id})
+            session = UserSession.search({"session_id": session_id})
         except Exception:
             return None
-        if not user_session:
+        if not session:
             return None
-
-        user_session = user_session[0]
-
-        # Check session expiration if applicable
+        session_ok = session[0]
         if self.session_duration > 0:
-            if (datetime.now() - user_session.created_at)\
-                    .total_seconds() > self.session_duration:
+            if (datetime.now() - session_ok.created_at)\
+                 .total_seconds() > self.session_duration:
                 return None
-
-        return user_session.user_id
+        return session_ok.user_id
 
     def destroy_session(self, request=None):
         """ destroy session method """
