@@ -39,7 +39,7 @@ class Auth:
             return bcrypt.checkpw(password.encode(), user.hashed_password)
         except NoResultFound:
             return False
-    
+
     def _generate_uuid(self) -> str:
         """ method for generating uuid """
-        return uuid4()
+        return str(uuid4())
