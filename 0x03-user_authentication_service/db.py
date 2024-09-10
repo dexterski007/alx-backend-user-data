@@ -38,8 +38,8 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
-    
-    def find_user_by(self, **kwargs):
+
+    def find_user_by(self, **kwargs: dict) -> User:
         """ find user method """
         try:
             new_user = self.__session.query(User).filter_by(**kwargs)
@@ -47,4 +47,4 @@ class DB:
             raise
         except InvalidRequestError:
             raise
-        return new_user       
+        return new_user
