@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """flask app basic
 """
-from flask import Flask, jsonify, Response, request
+from flask import Flask, jsonify, Response, request, abort
+from flask import make_response
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -26,6 +27,19 @@ def users() -> Response:
         return jsonify({"email": email, "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'])
+def login() -> Response:
+    """ route for login """
+    email = request.form["email"]
+    password = request.form["password"]
+    answ = jsonify({"email": email, "message": "logged in"}), 200
+    if AUTH.valid_login(email, password):
+        resp = make_response(answ)
+        resp.set_cookie('session_id', AUTH.create_session(email))
+        return resp
+    abort(401)
 
 
 if __name__ == "__main__":
