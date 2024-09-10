@@ -9,6 +9,7 @@ Base = declarative_base()
 
 
 class User(Base):
+    """ user class for sqlalchemy """
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
