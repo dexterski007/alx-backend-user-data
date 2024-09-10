@@ -42,7 +42,7 @@ class DB:
     def find_user_by(self, **kwargs: dict) -> User:
         """ find user method """
         try:
-            new_user = self.__session.query(User).filter_by(**kwargs)
+            new_user = self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise
         except InvalidRequestError:
