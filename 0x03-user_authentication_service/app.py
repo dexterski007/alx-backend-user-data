@@ -86,7 +86,7 @@ def update_password() -> str:
     except ValueError:
         abort(403)
         change_flag = False
-    if change_flag is False:
+    if not change_flag:
         abort(403)
     return jsonify({"email": email, "message": "Password updated"}), 200
 
