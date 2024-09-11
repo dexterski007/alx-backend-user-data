@@ -79,11 +79,13 @@ def update_password():
     email = request.form['email']
     reset_token = request.form['reset_token']
     new_password = request.form['new_password']
+    if not email or not reset_token or not new_password:
+        abort(403)
     try:
         AUTH.update_password(reset_token, new_password)
-        return jsonify({"email": email, "message": "Password updated"}), 200
-    except Exception:
+    except (ValueError, NoResultFound):
         abort(403)
+    return jsonify({"email": email, "message": "Password updated"}), 200
 
 
 if __name__ == "__main__":
