@@ -74,5 +74,21 @@ def get_reset_password_token() -> Response:
         abort(403)
 
 
+@app.route('/reset_password', methods=['PUT'])
+def update_password() -> Response:
+    email = request.form['email']
+    reset_token = request.form['reset_token']
+    new_password = request.form['new_password']
+    try:
+        token = AUTH.get_reset_password_token(email)
+        if token == reset_token:
+            AUTH.update_password(token, new_password)
+            return jsonify({"email": email, "message": "Password updated"})
+        else:
+            abort(403)
+    except NoResultFound:
+        abort(403)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
