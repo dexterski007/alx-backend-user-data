@@ -2,7 +2,7 @@
 """flask app basic
 """
 from flask import Flask, jsonify, Response, request, abort
-from flask import make_response
+from flask import make_response, redirect
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -40,6 +40,18 @@ def login() -> Response:
         resp.set_cookie('session_id', AUTH.create_session(email))
         return resp
     abort(401)
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout() -> Response:
+    """ route for logout """
+    session_id = request.form['session_id']
+    try:
+        user = AUTH.get_user_from_session_id(session_id)
+        AUTH.destroy_session(user.user_id)
+        redirect("/")
+    except NoResultFound:
+        abort(403)
 
 
 if __name__ == "__main__":
